@@ -70,6 +70,13 @@ export default async function CartPage() {
           {formatPrice(cart.item_subtotal ?? cart.subtotal ?? 0, cart.currency_code)}
         </span>
       </div>
+
+      <Link
+        href="/checkout"
+        className={buttonVariants({ size: "lg", className: "mt-6 w-full bg-deep text-white hover:bg-deep/90" })}
+      >
+        Checkout
+      </Link>
     </div>
   );
 }

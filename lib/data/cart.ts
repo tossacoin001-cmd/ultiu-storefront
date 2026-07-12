@@ -13,7 +13,8 @@ export async function retrieveCart() {
 
   try {
     const { cart } = await sdk.store.cart.retrieve(cartId, {
-      fields: "*items,*items.variant,*items.product,*region",
+      fields:
+        "*items,*items.variant,*items.product,*region,*shipping_address,*shipping_methods,*payment_collection.payment_sessions,email,currency_code,item_subtotal,shipping_total,tax_total,total",
     });
     return cart;
   } catch {
