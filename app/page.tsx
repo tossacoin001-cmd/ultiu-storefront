@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -11,9 +12,12 @@ export default function Home() {
         once product photography exists. This page proves the design system: fonts,
         colors, header, footer, and a styled button.
       </p>
-      <Button size="lg" className="bg-deep text-white hover:bg-deep/90">
+      <Link
+        href="/shop"
+        className={buttonVariants({ size: "lg", className: "bg-deep text-white hover:bg-deep/90" })}
+      >
         Shop Now
-      </Button>
+      </Link>
     </div>
   );
 }
