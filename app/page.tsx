@@ -1,23 +1,61 @@
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { Hero } from "@/components/hero";
+import { listProducts } from "@/lib/data/products";
+import { formatPrice } from "@/lib/format-price";
 
-export default function Home() {
+export default async function Home() {
+  const products = await listProducts();
+
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-paper px-6 py-32 text-center">
-      <h1 className="max-w-2xl font-headline text-5xl font-medium leading-[0.95] tracking-tight text-ink">
-        Unlock the U Within
-      </h1>
-      <p className="max-w-md text-lg text-graphite">
-        The real hero (Court gradient, floating paddle, orbital rings) ships in Phase 5,
-        once product photography exists. This page proves the design system: fonts,
-        colors, header, footer, and a styled button.
-      </p>
-      <Link
-        href="/shop"
-        className={buttonVariants({ size: "lg", className: "bg-deep text-white hover:bg-deep/90" })}
-      >
-        Shop Now
-      </Link>
-    </div>
+    <>
+      <Hero />
+
+      <section className="bg-paper px-6 py-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-headline text-2xl font-medium tracking-tight text-ink">
+              The Collection
+            </h2>
+            <Link href="/shop" className="text-sm text-graphite hover:text-signal">
+              Shop all
+            </Link>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => {
+              const prices = product.variants
+                ?.map((v) => v.calculated_price?.calculated_amount)
+                .filter((p): p is number => typeof p === "number");
+              const currencyCode =
+                product.variants?.[0]?.calculated_price?.currency_code ?? "usd";
+              const minPrice = prices?.length ? Math.min(...prices) : null;
+
+              return (
+                <Link key={product.id} href={`/shop/${product.handle}`} className="group block">
+                  <div className="flex aspect-square w-full items-center justify-center overflow-hidden bg-ink/5">
+                    {product.thumbnail ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={product.thumbnail}
+                        alt={product.title ?? ""}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      <span className="text-sm text-graphite/50">Photography coming soon</span>
+                    )}
+                  </div>
+                  <h3 className="mt-4 text-sm font-medium text-ink">{product.title}</h3>
+                  {minPrice !== null && (
+                    <p className="mt-1 text-sm text-graphite">
+                      From {formatPrice(minPrice, currencyCode)}
+                    </p>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
