@@ -3,31 +3,13 @@ type LogoProps = {
 };
 
 /**
- * Placeholder wordmark. The real brand asset is an interlocked monoline mark
- * (docs/03-design-system.md, "The logo"). Swap the contents of this
- * component for the owner's actual logo SVG once supplied; the currentColor
- * contract (white on court/ink, graphite on paper) stays the same.
+ * The real brand mark (public/logo.png), supplied as a transparent-background
+ * PNG. Solid black artwork, so `invert` flips it to white for the dark
+ * (court/ink) surfaces it's currently placed on everywhere in the app. If
+ * the logo is ever placed on a paper/light surface, drop the `invert` class
+ * at that call site instead of here.
  */
 export function Logo({ className }: LogoProps) {
-  return (
-    <svg
-      viewBox="0 0 108 24"
-      role="img"
-      aria-label="ULTIU"
-      className={className}
-      fill="none"
-    >
-      <text
-        x="0"
-        y="18"
-        fill="currentColor"
-        fontFamily="var(--font-headline), sans-serif"
-        fontSize="20"
-        fontWeight="600"
-        letterSpacing="1"
-      >
-        ULTIU
-      </text>
-    </svg>
-  );
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/logo.png" alt="ULTIU" className={`invert ${className ?? ""}`} />;
 }

@@ -2,14 +2,28 @@ import Link from "next/link";
 import { listProducts } from "@/lib/data/products";
 import { formatPrice } from "@/lib/format-price";
 
-export default async function ShopPage() {
-  const products = await listProducts();
+export default async function ShopPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  const products = await listProducts(q);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
       <h1 className="font-headline text-4xl font-medium tracking-tight text-ink">
-        Shop
+        {q ? `Results for "${q}"` : "Shop"}
       </h1>
+      {q && products.length === 0 && (
+        <p className="mt-4 text-graphite">
+          No products matched. Try a different search, or{" "}
+          <Link href="/shop" className="text-signal hover:underline">
+            browse the full collection
+          </Link>
+          .
+        </p>
+      )}
 
       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => {

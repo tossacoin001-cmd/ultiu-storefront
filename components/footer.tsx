@@ -31,7 +31,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
           <div className="col-span-2">
-            <Logo className="h-6 w-auto" />
+            <Logo className="h-9 w-auto" />
             <p className="mt-4 max-w-xs text-sm text-white/80">
               Unlock the U within. Global sport gear, based in Richmond, Texas.
             </p>

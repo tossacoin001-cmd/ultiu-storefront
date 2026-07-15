@@ -1,10 +1,11 @@
 import { sdk } from "@/lib/medusa";
 import { getRegion } from "@/lib/data/regions";
 
-export async function listProducts() {
+export async function listProducts(query?: string) {
   const region = await getRegion();
   const { products } = await sdk.store.product.list({
     region_id: region.id,
+    q: query,
     fields: "*variants.calculated_price,*images,+variants.inventory_quantity",
   });
   return products;
