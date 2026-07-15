@@ -9,9 +9,9 @@ export default function ShippingPage() {
         <section>
           <h2 className="text-base font-medium text-ink">Processing time</h2>
           <p className="mt-2 leading-relaxed">
-            In-stock items ship from Richmond, Texas within 1-2 business days.
-            Custom paddles need a little longer, since each one is built to
-            your design after you order it.
+            In-stock items ship within 1-2 business days. Custom paddles
+            need a little longer, since each one is built to your design
+            after you order it.
           </p>
         </section>
 

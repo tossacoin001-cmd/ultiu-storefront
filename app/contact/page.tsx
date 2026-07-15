@@ -17,8 +17,8 @@ export default function ContactPage() {
       </a>
 
       <p className="mt-8 text-sm text-graphite">
-        Based in Richmond, Texas. We typically reply within 1-2 business
-        days.
+        Real questions get real answers. We typically reply within 1-2
+        business days.
       </p>
     </div>
   );

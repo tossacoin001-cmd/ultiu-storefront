@@ -33,7 +33,7 @@ export function Footer() {
           <div className="col-span-2">
             <Logo className="h-9 w-auto" />
             <p className="mt-4 max-w-xs text-sm text-white/80">
-              Unlock the U within. Global sport gear, based in Richmond, Texas.
+              Unlock the U within. Custom sport gear built for players who demand more.
             </p>
             <div className="mt-6 flex items-center gap-4">
               {SOCIAL_LINKS.map(({ href, label, icon: Icon }) => (

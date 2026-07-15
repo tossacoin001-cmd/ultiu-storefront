@@ -9,7 +9,7 @@ export default function AboutPage() {
           Unlock the U Within
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-white/85">
-          Sport gear for players who expect more, based in Richmond, Texas.
+          Sport gear for players who expect more, made your way.
         </p>
       </section>
 
@@ -27,9 +27,10 @@ export default function AboutPage() {
           the same paddle we build and ship, not a mockup.
         </p>
         <p className="mt-6 text-lg leading-relaxed text-graphite">
-          We are a small, solo-run operation out of Richmond, Texas. Every
-          order is packed and reviewed by an actual person, not a warehouse
-          system. If something is not right, we want to hear about it.
+          We are a small, solo-run operation built around one goal: gear
+          that feels made for you. Every order is packed and reviewed by an
+          actual person, not a warehouse system. If something is not right,
+          we want to hear about it.
         </p>
       </section>
 
