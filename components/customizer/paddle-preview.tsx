@@ -50,35 +50,29 @@ function LibraryGraphic({ id, color }: { id: string; color: string }) {
   return null;
 }
 
+// Real logo.png is 201x155; keep that aspect ratio at watermark size.
+const BRAND_MARK_W = 42;
+const BRAND_MARK_H = BRAND_MARK_W * (155 / 201);
+
 /**
  * The fixed ULTIU brand mark. Every customized paddle carries this,
  * regardless of the customer's own graphic/text choices — reference:
  * physical paddle samples show it small, centered, sitting below the main
- * design. Same stroke paths as components/logo.tsx's approximation, scaled
- * down and recolored to contrast with the chosen face color.
+ * design. This is the actual logo asset (public/logo.png), not a redrawn
+ * approximation — solid black artwork, inverted to white when it needs to
+ * sit on a dark face color.
  */
-function BrandMark({ color }: { color: string }) {
+function BrandMark({ needsInvert }: { needsInvert: boolean }) {
   return (
-    <g transform={`translate(${FACE_CX} 300) scale(0.55)`}>
-      <g transform="translate(-50 -48)">
-        <path
-          d="M25 10 C36 28, 56 38, 66 54 C76 68, 70 83, 54 80 C46 78, 44 70, 51 66"
-          fill="none"
-          stroke={color}
-          strokeWidth={7.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M75 10 C64 28, 44 38, 34 54 C24 68, 30 83, 46 80 C54 78, 56 70, 49 66"
-          fill="none"
-          stroke={color}
-          strokeWidth={7.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </g>
-    </g>
+    <image
+      href="/logo.png"
+      x={FACE_CX - BRAND_MARK_W / 2}
+      y={300 - BRAND_MARK_H / 2}
+      width={BRAND_MARK_W}
+      height={BRAND_MARK_H}
+      preserveAspectRatio="xMidYMid meet"
+      filter={needsInvert ? "url(#invertMark)" : undefined}
+    />
   );
 }
 
@@ -174,6 +168,13 @@ export const PaddlePreview = forwardRef<HTMLDivElement, PaddlePreviewProps>(
                 floodOpacity="0.35"
               />
             </filter>
+            {/* Flips the logo's solid-black artwork to white for dark face colors. */}
+            <filter id="invertMark" x="-20%" y="-20%" width="140%" height="140%">
+              <feColorMatrix
+                type="matrix"
+                values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"
+              />
+            </filter>
           </defs>
 
           <g filter="url(#paddleShadow)">
@@ -239,7 +240,7 @@ export const PaddlePreview = forwardRef<HTMLDivElement, PaddlePreviewProps>(
 
             {/* Fixed brand mark: on every paddle, no matter the design */}
             <g clipPath="url(#faceClip)">
-              <BrandMark color={markColor} />
+              <BrandMark needsInvert={markColor === "#FFFFFF"} />
             </g>
 
             {/* Finish: edge vignette + top gloss drawn OVER the print */}
