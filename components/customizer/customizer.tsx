@@ -9,9 +9,11 @@ import { addCustomPaddleToCart } from "@/lib/data/customizer";
 import {
   paddleCustomizer,
   defaultSelections,
+  defaultGraphicTransform,
   deriveTier,
   tierLabels,
   type PaddleSelections,
+  type GraphicTransform,
 } from "@/lib/customizer-config";
 
 type TierVariant = { id: string; price: number };
@@ -30,9 +32,31 @@ export function Customizer({
   const tier = deriveTier(selections);
   const variant = tierVariants[tier];
 
+  const hasGraphic =
+    Boolean(selections.uploadedGraphicUrl) || selections.graphicId !== "none";
+
   function update<K extends keyof PaddleSelections>(key: K, value: PaddleSelections[K]) {
     setStatus("idle");
     setSelections((s) => ({ ...s, [key]: value }));
+  }
+
+  function updateTransform(patch: Partial<GraphicTransform>) {
+    setStatus("idle");
+    setSelections((s) => ({
+      ...s,
+      graphicTransform: { ...s.graphicTransform, ...patch },
+    }));
+  }
+
+  function moveGraphic(dx: number, dy: number) {
+    setSelections((s) => ({
+      ...s,
+      graphicTransform: {
+        ...s.graphicTransform,
+        x: Math.max(-150, Math.min(150, s.graphicTransform.x + dx)),
+        y: Math.max(-170, Math.min(170, s.graphicTransform.y + dy)),
+      },
+    }));
   }
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -48,6 +72,7 @@ export function Customizer({
       reader.readAsDataURL(file);
     });
     update("uploadedGraphicUrl", dataUrl);
+    update("graphicTransform", { ...defaultGraphicTransform });
   }
 
   async function handleAddToCart() {
@@ -70,8 +95,17 @@ export function Customizer({
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_420px]">
       <div className="lg:sticky lg:top-24 lg:self-start">
         <div className="rounded-2xl bg-court p-10">
-          <PaddlePreview ref={previewRef} selections={selections} />
+          <PaddlePreview
+            ref={previewRef}
+            selections={selections}
+            onGraphicMove={moveGraphic}
+          />
         </div>
+        {hasGraphic && (
+          <p className="mt-3 text-center text-xs text-graphite">
+            Drag the design on the paddle to position it.
+          </p>
+        )}
       </div>
 
       <div className="space-y-8">
@@ -114,6 +148,7 @@ export function Customizer({
                 onClick={() => {
                   update("graphicId", g.id);
                   update("uploadedGraphicUrl", null);
+                  update("graphicTransform", { ...defaultGraphicTransform });
                 }}
                 aria-pressed={selections.graphicId === g.id && !selections.uploadedGraphicUrl}
                 className={`rounded border px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-signal ${
@@ -138,6 +173,49 @@ export function Customizer({
             </label>
           )}
         </fieldset>
+
+        {/* Design adjustment: drag on the preview + zoom/rotate here. The
+            face clip crops anything outside the paddle, so this covers
+            position, crop, zoom, and rotate. */}
+        {hasGraphic && (
+          <fieldset className="rounded-lg border border-silver p-4">
+            <legend className="px-1 text-sm font-medium text-ink">Adjust design</legend>
+            <label className="block text-xs text-graphite">
+              Size ({Math.round(selections.graphicTransform.scale * 100)}%)
+              <input
+                type="range"
+                min={0.4}
+                max={3.5}
+                step={0.05}
+                value={selections.graphicTransform.scale}
+                onChange={(e) => updateTransform({ scale: Number(e.target.value) })}
+                className="mt-1 w-full accent-signal"
+              />
+            </label>
+            <label className="mt-4 block text-xs text-graphite">
+              Rotate ({selections.graphicTransform.rotation}&deg;)
+              <input
+                type="range"
+                min={-180}
+                max={180}
+                step={1}
+                value={selections.graphicTransform.rotation}
+                onChange={(e) => updateTransform({ rotation: Number(e.target.value) })}
+                className="mt-1 w-full accent-signal"
+              />
+            </label>
+            <div className="mt-4">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => updateTransform({ ...defaultGraphicTransform })}
+              >
+                Reset position
+              </Button>
+            </div>
+          </fieldset>
+        )}
 
         {/* Text */}
         {paddleCustomizer.live.text.enabled && (

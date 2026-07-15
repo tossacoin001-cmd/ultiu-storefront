@@ -74,12 +74,34 @@ export const paddleCustomizer = {
   },
 } as const;
 
+/**
+ * Placement of the graphic on the paddle face. x/y are offsets from the
+ * face center in preview viewBox units; scale is a multiplier; rotation is
+ * degrees. Combined with the face clip this doubles as cropping: whatever
+ * falls outside the face silhouette is cut off, so drag + zoom + rotate
+ * covers position/crop/zoom/rotate editing.
+ */
+export type GraphicTransform = {
+  x: number;
+  y: number;
+  scale: number;
+  rotation: number;
+};
+
+export const defaultGraphicTransform: GraphicTransform = {
+  x: 0,
+  y: 0,
+  scale: 1,
+  rotation: 0,
+};
+
 export type PaddleSelections = {
   edgeColor: string;
   faceColor: string;
   gripColor: string;
   graphicId: string;
   uploadedGraphicUrl: string | null;
+  graphicTransform: GraphicTransform;
   text: string;
   textColor: string;
 };
@@ -90,6 +112,7 @@ export const defaultSelections: PaddleSelections = {
   gripColor: paddleCustomizer.live.gripColors[0].hex,
   graphicId: "none",
   uploadedGraphicUrl: null,
+  graphicTransform: defaultGraphicTransform,
   text: "",
   textColor: paddleCustomizer.live.text.colors[0].hex,
 };

@@ -60,6 +60,7 @@ export async function addCustomPaddleToCart(input: AddCustomPaddleInput) {
         grip_color: selections.gripColor,
         graphic_id: selections.graphicId,
         uploaded_graphic_url: uploadedGraphicUrl,
+        graphic_transform: selections.graphicTransform,
         text: selections.text,
         text_color: selections.textColor,
         proof_image: proofImageUrl,
