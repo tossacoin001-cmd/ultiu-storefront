@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { listProducts } from "@/lib/data/products";
 import { formatPrice } from "@/lib/format-price";
+import { WishlistButton } from "@/components/wishlist-button";
 
 export default async function ShopPage({
   searchParams,
@@ -36,36 +37,38 @@ export default async function ShopPage({
           const maxPrice = prices?.length ? Math.max(...prices) : null;
 
           return (
-            <Link
-              key={product.id}
-              href={`/shop/${product.handle}`}
-              className="group block"
-            >
-              <div className="aspect-square w-full overflow-hidden bg-ink/5 flex items-center justify-center">
-                {product.thumbnail ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={product.thumbnail}
-                    alt={product.title ?? ""}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-                ) : (
-                  <span className="text-sm text-graphite/50">
-                    Photography coming soon
-                  </span>
+            <div key={product.id} className="group relative">
+              <Link href={`/shop/${product.handle}`} className="block">
+                <div className="aspect-square w-full overflow-hidden bg-ink/5 flex items-center justify-center">
+                  {product.thumbnail ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={product.thumbnail}
+                      alt={product.title ?? ""}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                    />
+                  ) : (
+                    <span className="text-sm text-graphite/50">
+                      Photography coming soon
+                    </span>
+                  )}
+                </div>
+                <h2 className="mt-4 text-sm font-medium text-ink">
+                  {product.title}
+                </h2>
+                {minPrice !== null && (
+                  <p className="mt-1 text-sm text-graphite">
+                    {minPrice === maxPrice
+                      ? formatPrice(minPrice, currencyCode)
+                      : `From ${formatPrice(minPrice, currencyCode)}`}
+                  </p>
                 )}
-              </div>
-              <h2 className="mt-4 text-sm font-medium text-ink">
-                {product.title}
-              </h2>
-              {minPrice !== null && (
-                <p className="mt-1 text-sm text-graphite">
-                  {minPrice === maxPrice
-                    ? formatPrice(minPrice, currencyCode)
-                    : `From ${formatPrice(minPrice, currencyCode)}`}
-                </p>
-              )}
-            </Link>
+              </Link>
+              <WishlistButton
+                productId={product.id}
+                className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow [&_svg]:h-4 [&_svg]:w-4"
+              />
+            </div>
           );
         })}
       </div>

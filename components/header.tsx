@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ShoppingBag, User, Heart, Menu, Search } from "lucide-react";
+import { ShoppingBag, User, Menu, Search } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { retrieveCart } from "@/lib/data/cart";
+import { WishlistBadge } from "@/components/wishlist-badge";
 import {
   Sheet,
   SheetTrigger,
@@ -141,13 +142,7 @@ export async function Header() {
             <User className="h-5 w-5" strokeWidth={1.75} />
           </Link>
 
-          <Link
-            href="/account"
-            aria-label="Wishlist"
-            className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/10"
-          >
-            <Heart className="h-5 w-5" strokeWidth={1.75} />
-          </Link>
+          <WishlistBadge />
 
           {cartLink}
         </div>
