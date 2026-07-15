@@ -50,6 +50,38 @@ function LibraryGraphic({ id, color }: { id: string; color: string }) {
   return null;
 }
 
+/**
+ * The fixed ULTIU brand mark. Every customized paddle carries this,
+ * regardless of the customer's own graphic/text choices — reference:
+ * physical paddle samples show it small, centered, sitting below the main
+ * design. Same stroke paths as components/logo.tsx's approximation, scaled
+ * down and recolored to contrast with the chosen face color.
+ */
+function BrandMark({ color }: { color: string }) {
+  return (
+    <g transform={`translate(${FACE_CX} 300) scale(0.55)`}>
+      <g transform="translate(-50 -48)">
+        <path
+          d="M25 10 C36 28, 56 38, 66 54 C76 68, 70 83, 54 80 C46 78, 44 70, 51 66"
+          fill="none"
+          stroke={color}
+          strokeWidth={7.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M75 10 C64 28, 44 38, 34 54 C24 68, 30 83, 46 80 C54 78, 56 70, 49 66"
+          fill="none"
+          stroke={color}
+          strokeWidth={7.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </g>
+  );
+}
+
 /** Picks a legible mark color for a given face fill. */
 function contrastColor(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -193,9 +225,9 @@ export const PaddlePreview = forwardRef<HTMLDivElement, PaddlePreviewProps>(
               <g clipPath="url(#faceClip)">
                 <text
                   x={FACE_CX}
-                  y={284}
+                  y={264}
                   textAnchor="middle"
-                  fontSize={28}
+                  fontSize={26}
                   fontWeight={700}
                   fill={textColor}
                   style={{ fontFamily: "var(--font-headline), sans-serif", letterSpacing: 2 }}
@@ -204,6 +236,11 @@ export const PaddlePreview = forwardRef<HTMLDivElement, PaddlePreviewProps>(
                 </text>
               </g>
             )}
+
+            {/* Fixed brand mark: on every paddle, no matter the design */}
+            <g clipPath="url(#faceClip)">
+              <BrandMark color={markColor} />
+            </g>
 
             {/* Finish: edge vignette + top gloss drawn OVER the print */}
             <g clipPath="url(#faceClip)">
