@@ -51,7 +51,7 @@ export async function Header() {
       <SheetContent side="left" className="bg-ink text-white">
         <SheetHeader>
           <SheetTitle className="text-white">
-            <Logo className="h-7 w-auto" />
+            <Logo className="h-8 w-auto" />
           </SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-1 px-4">
@@ -82,7 +82,7 @@ export async function Header() {
         <div className="flex items-center">{menuSheet}</div>
 
         <Link href="/" aria-label="ULTIU home" className="justify-self-center">
-          <Logo className="h-9 w-auto" />
+          <Logo className="h-11 w-auto" />
         </Link>
 
         <div className="flex items-center justify-end gap-1">
@@ -101,7 +101,7 @@ export async function Header() {
       <div className="mx-auto hidden h-16 max-w-7xl items-center justify-between px-6 md:flex">
         <div className="flex items-center gap-8">
           <Link href="/" aria-label="ULTIU home" className="shrink-0">
-            <Logo className="h-8 w-auto" />
+            <Logo className="h-10 w-auto" />
           </Link>
           <nav className="flex items-center gap-6">
             {NAV_LINKS.map((link) => (
