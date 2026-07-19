@@ -21,7 +21,7 @@ const NAV_LINKS = [
   { href: "/about", label: "About" },
 ];
 
-export function MobileMenu() {
+export function MobileMenu({ isSignedIn }: { isSignedIn: boolean }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -70,7 +70,7 @@ export function MobileMenu() {
             onNavigate={navigate("/account")}
             className="rounded px-2 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/10"
           >
-            Sign In / Sign Up
+            {isSignedIn ? "My Account" : "Sign In / Sign Up"}
           </Link>
         </nav>
       </SheetContent>

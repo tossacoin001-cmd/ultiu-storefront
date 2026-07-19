@@ -4,7 +4,7 @@ import { retrieveCart } from "@/lib/data/cart";
 import { updateCartDetails, selectShippingMethod } from "@/lib/data/checkout";
 import { sdk } from "@/lib/medusa";
 import { formatPrice } from "@/lib/format-price";
-import { CheckoutSubmitButton } from "@/components/checkout-submit-button";
+import { FormSubmitButton } from "@/components/form-submit-button";
 import { ShippingMethodButton } from "@/components/shipping-method-button";
 import {
   CheckoutPaymentSection,
@@ -100,7 +100,7 @@ export default async function CheckoutPage() {
                 className="rounded border border-silver px-3 py-2 text-sm"
               />
               <input type="hidden" name="country_code" value="us" />
-              <CheckoutSubmitButton
+              <FormSubmitButton
                 idleLabel={hasAddress ? "Update details" : "Continue to shipping"}
                 pendingLabel={hasAddress ? "Updating…" : "Continuing…"}
                 className="sm:col-span-2 bg-deep text-white hover:bg-deep/90"

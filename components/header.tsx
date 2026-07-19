@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ShoppingBag, User, Search } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { retrieveCart } from "@/lib/data/cart";
+import { retrieveCustomer } from "@/lib/data/customer";
 import { WishlistBadge } from "@/components/wishlist-badge";
 import { MobileMenu } from "@/components/mobile-menu";
 
@@ -14,7 +15,7 @@ const NAV_LINKS = [
 ];
 
 export async function Header() {
-  const cart = await retrieveCart();
+  const [cart, customer] = await Promise.all([retrieveCart(), retrieveCustomer()]);
   const itemCount =
     cart?.items?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
 
@@ -41,7 +42,7 @@ export async function Header() {
       {/* Mobile: hamburger left, logo centered, account + cart right */}
       <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-4 md:hidden">
         <div className="flex items-center">
-          <MobileMenu />
+          <MobileMenu isSignedIn={Boolean(customer)} />
         </div>
 
         <Link href="/" aria-label="ULTIU home" className="justify-self-center">
