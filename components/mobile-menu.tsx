@@ -25,12 +25,16 @@ export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  // Base UI's Dialog swallows Link's own click-driven navigation when a nav
-  // link inside the sheet is clicked (confirmed: onOpenChange fires and the
-  // sheet closes, but the route never changes). Taking navigation over
-  // explicitly here sidesteps whatever internal event handling is
-  // interfering, instead of relying on Link + onOpenChange to cooperate.
-  const navigate = (href: string) => (e: React.MouseEvent) => {
+  // next/link's onClick prop does NOT stop its own internal navigation
+  // (confirmed by reading the source: linkClicked() ignores our
+  // preventDefault and always runs its own router call right after), so an
+  // onClick handler that also calls router.push() races Link's own
+  // navigation and intermittently aborts it (net::ERR_ABORTED on the RSC
+  // fetch, confirmed via Playwright). onNavigate is the one hook Link
+  // actually checks: calling its preventDefault stops Link's internal
+  // navigation cleanly, so we can close the sheet and navigate ourselves
+  // without competing against it.
+  const navigate = (href: string) => (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setOpen(false);
     router.push(href);
@@ -55,7 +59,7 @@ export function MobileMenu() {
             <Link
               key={link.href}
               href={link.href}
-              onClick={navigate(link.href)}
+              onNavigate={navigate(link.href)}
               className="rounded px-2 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/10"
             >
               {link.label}
@@ -63,7 +67,7 @@ export function MobileMenu() {
           ))}
           <Link
             href="/account"
-            onClick={navigate("/account")}
+            onNavigate={navigate("/account")}
             className="rounded px-2 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/10"
           >
             Sign In / Sign Up
