@@ -4,6 +4,8 @@ import { LinkedInIcon, InstagramIcon, FacebookIcon } from "@/components/social-i
 
 const SHOP_LINKS = [
   { href: "/shop", label: "All Gear" },
+  { href: "/shop?category=men", label: "Men" },
+  { href: "/shop?category=women", label: "Women" },
   { href: "/customize", label: "Design a Paddle" },
   { href: "/shop/rookas-fc-jersey", label: "Rookas FC Jersey" },
 ];

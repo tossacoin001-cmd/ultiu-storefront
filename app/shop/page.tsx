@@ -3,22 +3,37 @@ import { listProducts } from "@/lib/data/products";
 import { formatPrice } from "@/lib/format-price";
 import { WishlistButton } from "@/components/wishlist-button";
 
+const CATEGORY_LABELS: Record<string, string> = {
+  men: "Men",
+  women: "Women",
+};
+
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; category?: string }>;
 }) {
-  const { q } = await searchParams;
-  const products = await listProducts(q);
+  const { q, category } = await searchParams;
+  const products = await listProducts(q, category);
+  const categoryLabel = category ? CATEGORY_LABELS[category] ?? category : null;
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
       <h1 className="font-headline text-4xl font-medium tracking-tight text-ink">
-        {q ? `Results for "${q}"` : "Shop"}
+        {q ? `Results for "${q}"` : categoryLabel ?? "Shop"}
       </h1>
       {q && products.length === 0 && (
         <p className="mt-4 text-graphite">
           No products matched. Try a different search, or{" "}
+          <Link href="/shop" className="text-signal hover:underline">
+            browse the full collection
+          </Link>
+          .
+        </p>
+      )}
+      {!q && category && products.length === 0 && (
+        <p className="mt-4 text-graphite">
+          Nothing in {categoryLabel} yet, check back soon, or{" "}
           <Link href="/shop" className="text-signal hover:underline">
             browse the full collection
           </Link>

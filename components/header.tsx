@@ -1,18 +1,14 @@
 import Link from "next/link";
-import { ShoppingBag, User, Menu, Search } from "lucide-react";
+import { ShoppingBag, User, Search } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { retrieveCart } from "@/lib/data/cart";
 import { WishlistBadge } from "@/components/wishlist-badge";
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { MobileMenu } from "@/components/mobile-menu";
 
 const NAV_LINKS = [
   { href: "/shop", label: "Shop" },
+  { href: "/shop?category=men", label: "Men" },
+  { href: "/shop?category=women", label: "Women" },
   { href: "/customize", label: "Customize" },
   { href: "/about", label: "About" },
 ];
@@ -40,46 +36,13 @@ export async function Header() {
     </Link>
   );
 
-  const menuSheet = (
-    <Sheet>
-      <SheetTrigger
-        aria-label="Open menu"
-        className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"
-      >
-        <Menu className="h-5 w-5" strokeWidth={1.75} />
-      </SheetTrigger>
-      <SheetContent side="left" className="bg-ink text-white">
-        <SheetHeader>
-          <SheetTitle className="text-white">
-            <Logo className="h-8 w-auto" />
-          </SheetTitle>
-        </SheetHeader>
-        <nav className="flex flex-col gap-1 px-4">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded px-2 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/10"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link
-            href="/account"
-            className="rounded px-2 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/10"
-          >
-            Sign In / Sign Up
-          </Link>
-        </nav>
-      </SheetContent>
-    </Sheet>
-  );
-
   return (
     <header className="sticky top-0 z-50 bg-ink text-white">
       {/* Mobile: hamburger left, logo centered, account + cart right */}
       <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-4 md:hidden">
-        <div className="flex items-center">{menuSheet}</div>
+        <div className="flex items-center">
+          <MobileMenu />
+        </div>
 
         <Link href="/" aria-label="ULTIU home" className="justify-self-center">
           <Logo className="h-11 w-auto" />
