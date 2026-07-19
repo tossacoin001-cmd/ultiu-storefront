@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Logo } from "@/components/logo";
 import {
@@ -22,6 +23,18 @@ const NAV_LINKS = [
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  // Base UI's Dialog swallows Link's own click-driven navigation when a nav
+  // link inside the sheet is clicked (confirmed: onOpenChange fires and the
+  // sheet closes, but the route never changes). Taking navigation over
+  // explicitly here sidesteps whatever internal event handling is
+  // interfering, instead of relying on Link + onOpenChange to cooperate.
+  const navigate = (href: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpen(false);
+    router.push(href);
+  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -42,7 +55,7 @@ export function MobileMenu() {
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => setOpen(false)}
+              onClick={navigate(link.href)}
               className="rounded px-2 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/10"
             >
               {link.label}
@@ -50,7 +63,7 @@ export function MobileMenu() {
           ))}
           <Link
             href="/account"
-            onClick={() => setOpen(false)}
+            onClick={navigate("/account")}
             className="rounded px-2 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/10"
           >
             Sign In / Sign Up
