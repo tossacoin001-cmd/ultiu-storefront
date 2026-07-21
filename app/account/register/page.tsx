@@ -6,7 +6,25 @@ import { registerCustomer } from "@/lib/data/customer";
 import { FormSubmitButton } from "@/components/form-submit-button";
 
 export default function RegisterPage() {
-  const [state, formAction] = useActionState(registerCustomer, { error: null });
+  const [state, formAction] = useActionState(registerCustomer, {
+    error: null,
+    pendingVerification: false,
+  });
+
+  if (state.pendingVerification) {
+    return (
+      <div className="mx-auto max-w-md px-6 py-24 text-center">
+        <h1 className="font-headline text-3xl font-medium tracking-tight text-ink">
+          Check your email
+        </h1>
+        <p className="mt-3 text-graphite">
+          We sent you a confirmation link. Click it to finish creating your
+          account. Check promotions or spam if it doesn&apos;t show up in a
+          couple minutes.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-md px-6 py-24">
