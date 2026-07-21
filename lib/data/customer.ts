@@ -137,32 +137,23 @@ export async function confirmSignup(code: string): Promise<AuthActionState> {
     };
   }
 
+  let token: string;
   try {
     await sdk.store.customer.create(
       { email: pending.email, first_name: pending.first_name, last_name: pending.last_name },
       {},
       { Authorization: `Bearer ${pending.registrationToken}` }
     );
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    // TEMP DEBUG: surface the real error while diagnosing a reported bug.
-    return { error: `DEBUG customer.create failed: ${message}` };
-  }
 
-  let token: string;
-  try {
     const refreshed = await sdk.auth.refresh({
       Authorization: `Bearer ${pending.registrationToken}`,
     });
     if (!("token" in refreshed) || !refreshed.token) {
-      // TEMP DEBUG: dump the actual shape while diagnosing.
-      return { error: `DEBUG refresh returned unexpected shape: ${JSON.stringify(refreshed)}` };
+      return { error: "Account created, but signing in needs an extra step. Try signing in manually." };
     }
     token = refreshed.token;
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    // TEMP DEBUG: surface the real error while diagnosing a reported bug.
-    return { error: `DEBUG refresh failed: ${message}` };
+  } catch {
+    return { error: "Couldn't finish creating your account. Please try again." };
   }
 
   await setCustomerToken(token);
